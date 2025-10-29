@@ -13,7 +13,7 @@
 
 package frc.robot;
 
-import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Inches;
 import static frc.robot.subsystems.vision.VisionConstants.*;
 import static frc.robot.subsystems.vision.VisionConstants.robotToCamera1;
 
@@ -33,6 +33,10 @@ import frc.robot.subsystems.arm.ArmIO;
 import frc.robot.subsystems.arm.ArmIOReal;
 import frc.robot.subsystems.arm.ArmIOSim;
 import frc.robot.subsystems.drive.*;
+import frc.robot.subsystems.elevator.Elevator;
+import frc.robot.subsystems.elevator.ElevatorIO;
+import frc.robot.subsystems.elevator.ElevatorIOReal;
+import frc.robot.subsystems.elevator.ElevatorIOSim;
 import frc.robot.subsystems.vision.*;
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
@@ -48,6 +52,7 @@ public class RobotContainer {
     // Subsystems
     private final Drive drive;
     private final Vision vision;
+    private final Elevator elevator;
     private final Arm arm;
 
     private SwerveDriveSimulation driveSimulation = null;
@@ -74,6 +79,7 @@ public class RobotContainer {
                         drive,
                         new VisionIOLimelight(VisionConstants.camera0Name, drive::getRotation),
                         new VisionIOLimelight(VisionConstants.camera1Name, drive::getRotation));
+                elevator = new Elevator(new ElevatorIOReal());
                 arm = new Arm(new ArmIOReal());
 
                 break;
@@ -99,6 +105,7 @@ public class RobotContainer {
                                 camera0Name, robotToCamera0, driveSimulation::getSimulatedDriveTrainPose),
                         new VisionIOPhotonVisionSim(
                                 camera1Name, robotToCamera1, driveSimulation::getSimulatedDriveTrainPose));
+                elevator = new Elevator(new ElevatorIOSim());
                 arm = new Arm(new ArmIOSim());
 
                 break;
@@ -113,6 +120,7 @@ public class RobotContainer {
                         new ModuleIO() {},
                         (pose) -> {});
                 vision = new Vision(drive, new VisionIO() {}, new VisionIO() {});
+                elevator = new Elevator(new ElevatorIO() {});
                 arm = new Arm(new ArmIO() {});
 
                 break;
@@ -160,10 +168,14 @@ public class RobotContainer {
                 : () -> drive.setPose(new Pose2d(drive.getPose().getTranslation(), new Rotation2d())); // zero gyro
         controller.start().onTrue(Commands.runOnce(resetGyro, drive).ignoringDisable(true));
 
-        controller.a().onTrue(Commands.runOnce(() -> arm.setArmPosition(Degrees.of(135)), arm));
-        controller.b().onTrue(Commands.runOnce(() -> arm.setArmPosition(Degrees.of(-35)), arm));
-        controller.x().onTrue(Commands.runOnce(() -> arm.setArmPosition(Degrees.of(103)), arm));
-        controller.y().onTrue(Commands.runOnce(() -> arm.setArmPosition(Degrees.of(160)), arm));
+        // controller.a().onTrue(Commands.runOnce(() -> arm.setArmPosition(Degrees.of(135)), arm));
+        // controller.b().onTrue(Commands.runOnce(() -> arm.setArmPosition(Degrees.of(-35)), arm));
+        // controller.x().onTrue(Commands.runOnce(() -> arm.setArmPosition(Degrees.of(103)), arm));
+        // controller.y().onTrue(Commands.runOnce(() -> arm.setArmPosition(Degrees.of(160)), arm));
+        controller.a().onTrue(Commands.runOnce(() -> elevator.setPosition(Inches.of(0)), elevator));
+        controller.b().onTrue(Commands.runOnce(() -> elevator.setPosition(Inches.of(11.5)), elevator));
+        controller.x().onTrue(Commands.runOnce(() -> elevator.setPosition(Inches.of(27.25)), elevator));
+        controller.y().onTrue(Commands.runOnce(() -> elevator.setPosition(Inches.of(52.7)), elevator));
     }
 
     /**

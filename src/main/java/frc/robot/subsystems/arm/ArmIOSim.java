@@ -44,7 +44,7 @@ public class ArmIOSim implements ArmIO {
             0.2897255217,
             ArmConstants.baseAngle.in(Radians),
             Units.degreesToRadians(180.0),
-            true,
+            false,
             ArmConstants.startingAngle.in(Radians));
 
     private final MotionMagicVoltage magicRequest = new MotionMagicVoltage(0.0);
