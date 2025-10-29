@@ -44,6 +44,10 @@ import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorIO;
 import frc.robot.subsystems.elevator.ElevatorIOReal;
 import frc.robot.subsystems.elevator.ElevatorIOSim;
+import frc.robot.subsystems.leds.LED;
+import frc.robot.subsystems.leds.LedIO;
+import frc.robot.subsystems.leds.LedIOReal;
+import frc.robot.subsystems.leds.LedIOSim;
 import frc.robot.subsystems.vision.*;
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
@@ -63,6 +67,7 @@ public class RobotContainer {
     private final Arm arm;
     private final CoralIntake coralIntake;
     private final AlgaeIntake algaeIntake;
+    private final LED leds;
 
     public SwerveDriveSimulation driveSimulation = null;
 
@@ -92,6 +97,7 @@ public class RobotContainer {
                 arm = new Arm(new ArmIOReal());
                 coralIntake = new CoralIntake(new CoralIntakeIOReal(), elevator, arm);
                 algaeIntake = new AlgaeIntake(new AlgaeIntakeIO() {});
+                leds = new LED(new LedIOReal());
 
                 break;
             case SIM:
@@ -120,6 +126,7 @@ public class RobotContainer {
                 arm = new Arm(new ArmIOSim());
                 coralIntake = new CoralIntake(new CoralIntakeIOSim(driveSimulation, elevator, arm), elevator, arm);
                 algaeIntake = new AlgaeIntake(new AlgaeIntakeIOSim());
+                leds = new LED(new LedIOSim());
 
                 break;
 
@@ -137,6 +144,7 @@ public class RobotContainer {
                 arm = new Arm(new ArmIO() {});
                 coralIntake = new CoralIntake(new CoralIntakeIO() {}, elevator, arm);
                 algaeIntake = new AlgaeIntake(new AlgaeIntakeIO() {});
+                leds = new LED(new LedIO() {});
 
                 break;
         }
