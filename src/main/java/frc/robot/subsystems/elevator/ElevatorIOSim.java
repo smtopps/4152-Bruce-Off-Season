@@ -31,7 +31,7 @@ public class ElevatorIOSim implements ElevatorIO {
 
     double elevatorToDistanceRatio = 8.0 / (0.0572958 * Math.PI); // Meters
     private final ElevatorSim elevatorSim = new ElevatorSim(
-            DCMotor.getFalcon500(2), 8.0, 12.9899, 0.0572958, 0.0, Units.inchesToMeters(54.0), true, 0.0);
+            DCMotor.getFalcon500(2), 8.0, 12.9899, (0.0572958 / 2.0), 0.0, Units.inchesToMeters(54.0), true, 0.0);
 
     private final MotionMagicVoltage magicRequest = new MotionMagicVoltage(0.0);
 
