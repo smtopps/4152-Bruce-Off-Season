@@ -28,10 +28,17 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
 import frc.robot.constants.TunerConstants;
+import frc.robot.subsystems.algaeIntake.AlgaeIntake;
+import frc.robot.subsystems.algaeIntake.AlgaeIntakeIO;
+import frc.robot.subsystems.algaeIntake.AlgaeIntakeIOSim;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmIO;
 import frc.robot.subsystems.arm.ArmIOReal;
 import frc.robot.subsystems.arm.ArmIOSim;
+import frc.robot.subsystems.coralIntake.CoralIntake;
+import frc.robot.subsystems.coralIntake.CoralIntakeIO;
+import frc.robot.subsystems.coralIntake.CoralIntakeIOReal;
+import frc.robot.subsystems.coralIntake.CoralIntakeIOSim;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.elevator.ElevatorIO;
@@ -54,6 +61,8 @@ public class RobotContainer {
     private final Vision vision;
     private final Elevator elevator;
     private final Arm arm;
+    private final CoralIntake coralIntake;
+    private final AlgaeIntake algaeIntake;
 
     public SwerveDriveSimulation driveSimulation = null;
 
@@ -81,6 +90,8 @@ public class RobotContainer {
                         new VisionIOLimelight(VisionConstants.camera1Name, drive::getRotation));
                 elevator = new Elevator(new ElevatorIOReal());
                 arm = new Arm(new ArmIOReal());
+                coralIntake = new CoralIntake(new CoralIntakeIOReal(), elevator, arm);
+                algaeIntake = new AlgaeIntake(new AlgaeIntakeIO() {});
 
                 break;
             case SIM:
@@ -107,6 +118,8 @@ public class RobotContainer {
                                 camera1Name, robotToCamera1, driveSimulation::getSimulatedDriveTrainPose));
                 elevator = new Elevator(new ElevatorIOSim());
                 arm = new Arm(new ArmIOSim());
+                coralIntake = new CoralIntake(new CoralIntakeIOSim(driveSimulation, elevator, arm), elevator, arm);
+                algaeIntake = new AlgaeIntake(new AlgaeIntakeIOSim());
 
                 break;
 
@@ -122,6 +135,8 @@ public class RobotContainer {
                 vision = new Vision(drive, new VisionIO() {}, new VisionIO() {});
                 elevator = new Elevator(new ElevatorIO() {});
                 arm = new Arm(new ArmIO() {});
+                coralIntake = new CoralIntake(new CoralIntakeIO() {}, elevator, arm);
+                algaeIntake = new AlgaeIntake(new AlgaeIntakeIO() {});
 
                 break;
         }
